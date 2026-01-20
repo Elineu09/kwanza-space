@@ -24,8 +24,7 @@ public class AvailabilityService {
         for (Reservation existingReservation : allReservations) {
             // Only consider confirmed or checked-in reservations
             if (existingReservation.getStatus() == ReservationStatus.CONFIRMED ||
-                existingReservation.getStatus() == ReservationStatus.CHECKED_IN ||
-                existingReservation.getStatus() == ReservationStatus.CREATED) {
+                existingReservation.getStatus() == ReservationStatus.CHECKED_IN) {
                 
                 // Check if same room
                 if (existingReservation.getRoom().getNumber() == room.getNumber()) {

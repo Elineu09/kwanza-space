@@ -85,8 +85,19 @@ public class Menu {
             System.out.println("────────────────────────────────────────");
             System.out.print("> Escolha uma opção: ");
 
-            int opcao = scanner.nextInt();
-            scanner.nextLine();
+            int opcao = 0;
+            boolean entradaValida = false;
+            while (!entradaValida) {
+                try {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine();
+                    entradaValida = true;
+                } catch (java.util.InputMismatchException e) {
+                    System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                    scanner.nextLine();
+                    System.out.print("> Escolha uma opção: ");
+                }
+            }
 
             switch (opcao) {
                 case 1:
@@ -128,8 +139,19 @@ public class Menu {
             System.out.println("────────────────────────────────────────");
             System.out.print("> Escolha uma opção: ");
 
-            int opcao = scanner.nextInt();
-            scanner.nextLine();
+            int opcao = 0;
+            boolean entradaValidaReservas = false;
+            while (!entradaValidaReservas) {
+                try {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine();
+                    entradaValidaReservas = true;
+                } catch (java.util.InputMismatchException e) {
+                    System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                    scanner.nextLine();
+                    System.out.print("> Escolha uma opção: ");
+                }
+            }
 
             switch (opcao) {
                 case 1:
@@ -186,36 +208,62 @@ public class Menu {
                         Room room = hotel.getRooms().get(id - 1);
 
                         System.out.print("\n> Número de hóspedes: ");
-                        int nh = scanner.nextInt();
-                        while (nh < 1) {
-                            System.out.println("Erro: O número de hóspedes deve ser maior que 0.");
-                            break;
+                        int nh = 0;
+                        boolean numHospedesValido = false;
+                        while (!numHospedesValido) {
+                            try {
+                                nh = scanner.nextInt();
+                                if (nh < 1) {
+                                    System.out.println("Erro: O número de hóspedes deve ser maior que 0.");
+                                    System.out.print("> Número de hóspedes: ");
+                                } else {
+                                    numHospedesValido = true;
+                                }
+                            } catch (java.util.InputMismatchException e) {
+                                System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                scanner.nextLine();
+                                System.out.print("> Número de hóspedes: ");
+                            }
                         }
 
                         System.out.println("\nDATA DE CHECK-IN");
-                        System.out.print("> Dia: ");
-                        int dia = scanner.nextInt();
-                        System.out.print("> Mês: ");
-                        int mes = scanner.nextInt();
                         LocalDate checkinDate = null;
-                        try {
-                            checkinDate = LocalDate.of(2026, mes, dia);
-                        } catch (Exception e) {
-                            System.out.println("Erro: Data inválida: " + e.getMessage());
-                            break;
+                        boolean dataCheckinValida = false;
+                        while (!dataCheckinValida) {
+                            try {
+                                System.out.print("> Dia: ");
+                                int dia = scanner.nextInt();
+                                System.out.print("> Mês: ");
+                                int mes = scanner.nextInt();
+                                checkinDate = LocalDate.of(2026, mes, dia);
+                                dataCheckinValida = true;
+                            } catch (java.util.InputMismatchException e) {
+                                System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                scanner.nextLine();
+                            } catch (Exception e) {
+                                System.out.println("Erro: Data inválida: " + e.getMessage());
+                                scanner.nextLine();
+                            }
                         }
 
                         System.out.println("\nDATA DE CHECK-OUT");
-                        System.out.print("> Dia: ");
-                        dia = scanner.nextInt();
-                        System.out.print("> Mês: ");
-                        mes = scanner.nextInt();
                         LocalDate checkoutDate = null;
-                        try {
-                            checkoutDate = LocalDate.of(2026, mes, dia);
-                        } catch (Exception e) {
-                            System.out.println("Erro: Data inválida: " + e.getMessage());
-                            break;
+                        boolean dataCheckoutValida = false;
+                        while (!dataCheckoutValida) {
+                            try {
+                                System.out.print("> Dia: ");
+                                int dia = scanner.nextInt();
+                                System.out.print("> Mês: ");
+                                int mes = scanner.nextInt();
+                                checkoutDate = LocalDate.of(2026, mes, dia);
+                                dataCheckoutValida = true;
+                            } catch (java.util.InputMismatchException e) {
+                                System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                scanner.nextLine();
+                            } catch (Exception e) {
+                                System.out.println("Erro: Data inválida: " + e.getMessage());
+                                scanner.nextLine();
+                            }
                         }
 
                         LocalDate hoje = LocalDate.now();
@@ -294,11 +342,21 @@ public class Menu {
                         System.out.println(formatarReserva(r, reservaIndex));
                         reservaIndex++;
                     }
-                    System.out.print("> Selecione o número da reserva: ");
-                    int reserva = scanner.nextInt();
-                    if (reserva <= 0 || reserva > reservationService.getAllReservations().size()) {
-                        System.out.println("Erro: Número de reserva inválido!");
-                        break;
+                    int reserva = 0;
+                    boolean reservaValida = false;
+                    while (!reservaValida) {
+                        System.out.print("> Selecione o número da reserva: ");
+                        try {
+                            reserva = scanner.nextInt();
+                            if (reserva <= 0 || reserva > reservationService.getAllReservations().size()) {
+                                System.out.println("Erro: Número de reserva inválido!");
+                            } else {
+                                reservaValida = true;
+                            }
+                        } catch (java.util.InputMismatchException e) {
+                            System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                            scanner.nextLine();
+                        }
                     }
                     Reservation reservation = reservationService.getAllReservations().get(reserva - 1);
                     try {
@@ -321,11 +379,21 @@ public class Menu {
                         System.out.println(formatarReserva(r, reservaIndex));
                         reservaIndex++;
                     }
-                    System.out.print("> Selecione o número da reserva: ");
-                    int reserva2 = scanner.nextInt();
-                    if (reserva2 <= 0 || reserva2 > reservationService.getAllReservations().size()) {
-                        System.out.println("Erro: Número de reserva inválido!");
-                        break;
+                    int reserva2 = 0;
+                    boolean reserva2Valida = false;
+                    while (!reserva2Valida) {
+                        System.out.print("> Selecione o número da reserva: ");
+                        try {
+                            reserva2 = scanner.nextInt();
+                            if (reserva2 <= 0 || reserva2 > reservationService.getAllReservations().size()) {
+                                System.out.println("Erro: Número de reserva inválido!");
+                            } else {
+                                reserva2Valida = true;
+                            }
+                        } catch (java.util.InputMismatchException e) {
+                            System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                            scanner.nextLine();
+                        }
                     }
                     Reservation reservation2 = reservationService.getAllReservations().get(reserva2 - 1);
                     try {
@@ -344,11 +412,21 @@ public class Menu {
                         System.out.println(formatarReserva(r, reservaIndex));
                         reservaIndex++;
                     }
-                    System.out.print("> Selecione o número da reserva: ");
-                    int reserva3 = scanner.nextInt();
-                    if (reserva3 <= 0 || reserva3 > reservationService.getAllReservations().size()) {
-                        System.out.println("Erro: Número de reserva inválido!");
-                        break;
+                    int reserva3 = 0;
+                    boolean reserva3Valida = false;
+                    while (!reserva3Valida) {
+                        System.out.print("> Selecione o número da reserva: ");
+                        try {
+                            reserva3 = scanner.nextInt();
+                            if (reserva3 <= 0 || reserva3 > reservationService.getAllReservations().size()) {
+                                System.out.println("Erro: Número de reserva inválido!");
+                            } else {
+                                reserva3Valida = true;
+                            }
+                        } catch (java.util.InputMismatchException e) {
+                            System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                            scanner.nextLine();
+                        }
                     }
                     Reservation reservation3 = reservationService.getAllReservations().get(reserva3 - 1);
                     try {
@@ -380,8 +458,19 @@ public class Menu {
             System.out.println("────────────────────────────────────────");
             System.out.print("> Escolha uma opção: ");
 
-            int opcao = scanner.nextInt();
-            scanner.nextLine();
+            int opcao = 0;
+            boolean entradaValidaQuartos = false;
+            while (!entradaValidaQuartos) {
+                try {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine();
+                    entradaValidaQuartos = true;
+                } catch (java.util.InputMismatchException e) {
+                    System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                    scanner.nextLine();
+                    System.out.print("> Escolha uma opção: ");
+                }
+            }
 
             switch (opcao) {
                 case 1:
@@ -391,8 +480,22 @@ public class Menu {
                     System.out.println("  1. Standard");
                     System.out.println("  2. Deluxe");
                     System.out.println("  3. Suite");
-                    System.out.print("> Selecione o tipo: ");
-                    int n = scanner.nextInt();
+                    int n = 0;
+                    boolean tipoQuartoValido = false;
+                    while (!tipoQuartoValido) {
+                        System.out.print("> Selecione o tipo: ");
+                        try {
+                            n = scanner.nextInt();
+                            if (n >= 1 && n <= 3) {
+                                tipoQuartoValido = true;
+                            } else {
+                                System.out.println("Erro: Opção inválida! Escolha entre 1 e 3.");
+                            }
+                        } catch (java.util.InputMismatchException e) {
+                            System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                            scanner.nextLine();
+                        }
+                    }
                     switch (n) {
                         case 1:
                             hotel.addRoom(new Room(nquartos, RoomType.STANDARD, 25000.0, 2, RoomStatus.ACTIVE));
@@ -445,9 +548,9 @@ public class Menu {
                                     entradaValida = true;
                                     nquarto = id;
                                 }
-                            } catch (RuntimeException e) {
+                            } catch (java.util.InputMismatchException e) {
                                 System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
-                                scanner.next();
+                                scanner.nextLine();
                             }
                             Room room1 = hotel.getRooms().get(nquarto - 1);
                             while (cont < reservationService.getAllReservations().size()) {
@@ -463,8 +566,22 @@ public class Menu {
                             System.out.println("  1. ATIVO");
                             System.out.println("  2. INATIVO");
                             System.out.println("  3. MANUTENÇÃO");
-                            System.out.print("> Selecione o novo status: ");
-                            int status = scanner.nextInt();
+                            int status = 0;
+                            boolean statusValido = false;
+                            while (!statusValido) {
+                                System.out.print("> Selecione o novo status: ");
+                                try {
+                                    status = scanner.nextInt();
+                                    if (status >= 1 && status <= 3) {
+                                        statusValido = true;
+                                    } else {
+                                        System.out.println("Erro: Status inválido! Escolha entre 1 e 3.");
+                                    }
+                                } catch (java.util.InputMismatchException e) {
+                                    System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                    scanner.nextLine();
+                                }
+                            }
                             switch (status) {
                                 case 1:
                                     room1.setStatus(RoomStatus.ACTIVE);
@@ -566,8 +683,19 @@ public class Menu {
             System.out.println("────────────────────────────────────────");
             System.out.print("> Escolha uma opção: ");
 
-            int opcao = scanner.nextInt();
-            scanner.nextLine();
+            int opcao = 0;
+            boolean entradaValidaServicos = false;
+            while (!entradaValidaServicos) {
+                try {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine();
+                    entradaValidaServicos = true;
+                } catch (java.util.InputMismatchException e) {
+                    System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                    scanner.nextLine();
+                    System.out.print("> Escolha uma opção: ");
+                }
+            }
 
             switch (opcao) {
                 case 1:
@@ -581,12 +709,24 @@ public class Menu {
                         System.out.println("\nADICIONAR SERVIÇO À RESERVA");
                         System.out.println("────────────────────────────────────────");
                         reservationService.getAllReservations().forEach(System.out::println);
-                        System.out.print("> Selecione o número da reserva: ");
-                        int reserva = scanner.nextInt();
-                        if (reserva <= 0 || reserva > reservationService.getAllReservations().size()) {
-                            System.out.println("Erro: Número de reserva inválido!");
-                        } else {
-                            Reservation reservation1 = reservationService.getAllReservations().get(reserva - 1);
+                        int reserva = 0;
+                        boolean reservaServicosValida = false;
+                        while (!reservaServicosValida) {
+                            System.out.print("> Selecione o número da reserva: ");
+                            try {
+                                reserva = scanner.nextInt();
+                                if (reserva <= 0 || reserva > reservationService.getAllReservations().size()) {
+                                    System.out.println("Erro: Número de reserva inválido!");
+                                } else {
+                                    reservaServicosValida = true;
+                                }
+                            } catch (java.util.InputMismatchException e) {
+                                System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                scanner.nextLine();
+                            }
+                        }
+                        Reservation reservation1 = reservationService.getAllReservations().get(reserva - 1);
+                        if (true) {
                             if (reservation1.getStatus() == ReservationStatus.CANCELLED) {
                                 System.out.println("Atenção: Esta reserva foi cancelada e não pode ser modificada.");
                                 break;
@@ -601,8 +741,22 @@ public class Menu {
                                 System.out.println("2. " + ServiceType.BREAKFAST + " - Café da Manhã");
                                 System.out.println("3. " + ServiceType.PARKING + " - Estacionamento");
                                 System.out.println("4. " + ServiceType.LAUNDRY + " - Lavandaria");
-                                System.out.print("> Selecione o serviço: ");
-                                int servico = scanner.nextInt();
+                                int servico = 0;
+                                boolean servicoValido = false;
+                                while (!servicoValido) {
+                                    System.out.print("> Selecione o serviço: ");
+                                    try {
+                                        servico = scanner.nextInt();
+                                        if (servico >= 1 && servico <= 4) {
+                                            servicoValido = true;
+                                        } else {
+                                            System.out.println("Erro: Opção inválida! Escolha entre 1 e 4.");
+                                        }
+                                    } catch (java.util.InputMismatchException e) {
+                                        System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                        scanner.nextLine();
+                                    }
+                                }
                                 switch (servico) {
                                     case 1:
                                         reservation1.addService(new AdditionalService("Transporte", ServiceType.TRANSPORT, 20000.0, 1, BillingType.FIXED));
@@ -617,8 +771,22 @@ public class Menu {
                                         System.out.println("Sucesso: Serviço de Estacionamento adicionado com sucesso!");
                                         break;
                                     case 4:
-                                        System.out.print("> Quantas unidades deseja adicionar? ");
-                                        int unidades = scanner.nextInt();
+                                        int unidades = 0;
+                                        boolean unidadesValido = false;
+                                        while (!unidadesValido) {
+                                            System.out.print("> Quantas unidades deseja adicionar? ");
+                                            try {
+                                                unidades = scanner.nextInt();
+                                                if (unidades > 0) {
+                                                    unidadesValido = true;
+                                                } else {
+                                                    System.out.println("Erro: O número de unidades deve ser maior que 0.");
+                                                }
+                                            } catch (java.util.InputMismatchException e) {
+                                                System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                                scanner.nextLine();
+                                            }
+                                        }
                                         reservation1.addService(new AdditionalService("Lavandaria", ServiceType.LAUNDRY, 2000.0, unidades, BillingType.PER_UNIT));
                                         System.out.println("Sucesso: Serviço de Lavandaria (" + unidades + " unidades) adicionado com sucesso!");
                                         break;
@@ -656,8 +824,19 @@ public class Menu {
             System.out.println("────────────────────────────────────────");
             System.out.print("> Escolha uma opção: ");
 
-            int oopcao = scanner.nextInt();
-            scanner.nextLine();
+            int oopcao = 0;
+            boolean entradaValidaPagamentos = false;
+            while (!entradaValidaPagamentos) {
+                try {
+                    oopcao = scanner.nextInt();
+                    scanner.nextLine();
+                    entradaValidaPagamentos = true;
+                } catch (java.util.InputMismatchException e) {
+                    System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                    scanner.nextLine();
+                    System.out.print("> Escolha uma opção: ");
+                }
+            }
 
             switch (oopcao) {
                 case 1:
@@ -668,11 +847,21 @@ public class Menu {
                     System.out.println("\nPAGAMENTO TOTAL");
                     System.out.println("────────────────────────────────────────");
                     reservationService.getAllReservations().forEach(System.out::println);
-                    System.out.print("> Selecione o número da reserva: ");
-                    int reserva = scanner.nextInt();
-                    if (reserva <= 0 || reserva > reservationService.getAllReservations().size()) {
-                        System.out.println("Erro: Número de reserva inválido!");
-                        break;
+                    int reserva = 0;
+                    boolean reservaPagamentoValida = false;
+                    while (!reservaPagamentoValida) {
+                        System.out.print("> Selecione o número da reserva: ");
+                        try {
+                            reserva = scanner.nextInt();
+                            if (reserva <= 0 || reserva > reservationService.getAllReservations().size()) {
+                                System.out.println("Erro: Número de reserva inválido!");
+                            } else {
+                                reservaPagamentoValida = true;
+                            }
+                        } catch (java.util.InputMismatchException e) {
+                            System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                            scanner.nextLine();
+                        }
                     }
                     Reservation reservation = reservationService.getAllReservations().get(reserva - 1);
                     if (reservation.getStatus() == ReservationStatus.CANCELLED) {
@@ -696,8 +885,22 @@ public class Menu {
                         System.out.println("  2. Cartão de Débito");
                         System.out.println("  3. Dinheiro");
                         System.out.println("  4. Transferência Bancária");
-                        System.out.print("> Selecione o método: ");
-                        int metodo = scanner.nextInt();
+                        int metodo = 0;
+                        boolean metodoValido = false;
+                        while (!metodoValido) {
+                            System.out.print("> Selecione o método: ");
+                            try {
+                                metodo = scanner.nextInt();
+                                if (metodo >= 1 && metodo <= 4) {
+                                    metodoValido = true;
+                                } else {
+                                    System.out.println("Erro: Método de pagamento inválido! Escolha entre 1 e 4.");
+                                }
+                            } catch (java.util.InputMismatchException e) {
+                                System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                scanner.nextLine();
+                            }
+                        }
                         switch (metodo) {
                             case 1:
                                 Payment payment1 = new Payment(pricingService.calculateBalance(reservation), LocalDate.now(), PaymentMethod.CREDIT_CARD, PaymentStatus.CONFIRMED);
@@ -745,11 +948,21 @@ public class Menu {
                     System.out.println("\nPAGAMENTO PARCIAL");
                     System.out.println("────────────────────────────────────────");
                     reservationService.getAllReservations().forEach(System.out::println);
-                    System.out.print("> Selecione o número da reserva: ");
-                    reserva = scanner.nextInt();
-                    if (reserva <= 0 || reserva > reservationService.getAllReservations().size()) {
-                        System.out.println("Erro: Número de reserva inválido!");
-                        break;
+                    reserva = 0;
+                    reservaPagamentoValida = false;
+                    while (!reservaPagamentoValida) {
+                        System.out.print("> Selecione o número da reserva: ");
+                        try {
+                            reserva = scanner.nextInt();
+                            if (reserva <= 0 || reserva > reservationService.getAllReservations().size()) {
+                                System.out.println("Erro: Número de reserva inválido!");
+                            } else {
+                                reservaPagamentoValida = true;
+                            }
+                        } catch (java.util.InputMismatchException e) {
+                            System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                            scanner.nextLine();
+                        }
                     }
                     reservation = reservationService.getAllReservations().get(reserva - 1);
                     if (reservation.getStatus() == ReservationStatus.CANCELLED) {
@@ -773,12 +986,40 @@ public class Menu {
                         System.out.println("  2. Cartão de Débito");
                         System.out.println("  3. Dinheiro");
                         System.out.println("  4. Transferência Bancária");
-                        System.out.print("> Selecione o método: ");
-                        int metodo = scanner.nextInt();
-                        switch (metodo) {
+                        int metodoParc = 0;
+                        boolean metodoParciaisValido = false;
+                        while (!metodoParciaisValido) {
+                            System.out.print("> Selecione o método: ");
+                            try {
+                                metodoParc = scanner.nextInt();
+                                if (metodoParc >= 1 && metodoParc <= 4) {
+                                    metodoParciaisValido = true;
+                                } else {
+                                    System.out.println("Erro: Método de pagamento inválido! Escolha entre 1 e 4.");
+                                }
+                            } catch (java.util.InputMismatchException e) {
+                                System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                scanner.nextLine();
+                            }
+                        }
+                        switch (metodoParc) {
                             case 1:
-                                System.out.print("> Digite o valor a ser pago: ");
-                                int valor = scanner.nextInt();
+                                int valor = 0;
+                                boolean valorValido = false;
+                                while (!valorValido) {
+                                    System.out.print("> Digite o valor a ser pago: ");
+                                    try {
+                                        valor = scanner.nextInt();
+                                        if (valor > 0) {
+                                            valorValido = true;
+                                        } else {
+                                            System.out.println("Erro: O valor deve ser maior que 0.");
+                                        }
+                                    } catch (java.util.InputMismatchException e) {
+                                        System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                        scanner.nextLine();
+                                    }
+                                }
                                 Payment payment = new Payment(valor, LocalDate.now(), PaymentMethod.CREDIT_CARD, PaymentStatus.CONFIRMED);
                                 reservation.addPayment(payment);
                                 System.out.println("\nSucesso: Pagamento de " + String.format("%.2f", (double)valor) + " kz efetuado com sucesso via Cartão de Crédito!");
@@ -790,8 +1031,22 @@ public class Menu {
                                 }
                                 break;
                             case 2:
-                                System.out.print("> Digite o valor a ser pago: ");
-                                int valor2 = scanner.nextInt();
+                                int valor2 = 0;
+                                boolean valor2Valido = false;
+                                while (!valor2Valido) {
+                                    System.out.print("> Digite o valor a ser pago: ");
+                                    try {
+                                        valor2 = scanner.nextInt();
+                                        if (valor2 > 0) {
+                                            valor2Valido = true;
+                                        } else {
+                                            System.out.println("Erro: O valor deve ser maior que 0.");
+                                        }
+                                    } catch (java.util.InputMismatchException e) {
+                                        System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                        scanner.nextLine();
+                                    }
+                                }
                                 Payment payment2 = new Payment(valor2, LocalDate.now(), PaymentMethod.DEBIT_CARD, PaymentStatus.CONFIRMED);
                                 reservation.addPayment(payment2);
                                 System.out.println("\nSucesso: Pagamento de " + String.format("%.2f", (double)valor2) + " kz efetuado com sucesso via Cartão de Débito!");
@@ -803,8 +1058,22 @@ public class Menu {
                                 }
                                 break;
                             case 3:
-                                System.out.print("> Digite o valor a ser pago: ");
-                                int valor3 = scanner.nextInt();
+                                int valor3 = 0;
+                                boolean valor3Valido = false;
+                                while (!valor3Valido) {
+                                    System.out.print("> Digite o valor a ser pago: ");
+                                    try {
+                                        valor3 = scanner.nextInt();
+                                        if (valor3 > 0) {
+                                            valor3Valido = true;
+                                        } else {
+                                            System.out.println("Erro: O valor deve ser maior que 0.");
+                                        }
+                                    } catch (java.util.InputMismatchException e) {
+                                        System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                        scanner.nextLine();
+                                    }
+                                }
                                 Payment payment3 = new Payment(valor3, LocalDate.now(), PaymentMethod.CASH, PaymentStatus.CONFIRMED);
                                 reservation.addPayment(payment3);
                                 System.out.println("\nSucesso: Pagamento de " + String.format("%.2f", (double)valor3) + " kz efetuado com sucesso em Dinheiro!");
@@ -816,8 +1085,22 @@ public class Menu {
                                 }
                                 break;
                             case 4:
-                                System.out.print("> Digite o valor a ser pago: ");
-                                int valor4 = scanner.nextInt();
+                                int valor4 = 0;
+                                boolean valor4Valido = false;
+                                while (!valor4Valido) {
+                                    System.out.print("> Digite o valor a ser pago: ");
+                                    try {
+                                        valor4 = scanner.nextInt();
+                                        if (valor4 > 0) {
+                                            valor4Valido = true;
+                                        } else {
+                                            System.out.println("Erro: O valor deve ser maior que 0.");
+                                        }
+                                    } catch (java.util.InputMismatchException e) {
+                                        System.out.println("Erro: Entrada inválida! Digite apenas números inteiros.");
+                                        scanner.nextLine();
+                                    }
+                                }
                                 Payment payment4 = new Payment(valor4, LocalDate.now(), PaymentMethod.BANK_TRANSFER, PaymentStatus.CONFIRMED);
                                 reservation.addPayment(payment4);
                                 System.out.println("\nSucesso: Pagamento de " + String.format("%.2f", (double)valor4) + " kz efetuado com sucesso via Transferência Bancária!");
