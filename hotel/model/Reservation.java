@@ -23,6 +23,7 @@ public class Reservation {
         // Validate dates
         if (checkOutDate.compareTo(checkInDate) <= 0) {
             throw new IllegalArgumentException("checkOutDate must be strictly after checkInDate");
+
         }
 
         // Validate capacity

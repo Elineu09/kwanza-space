@@ -1,11 +1,8 @@
 package hotel.model.enums;
 
 public enum ServiceType {
-    ROOM_SERVICE,
-    SPA,
-    GYM,
+    TRANSPORT,
     PARKING,
     BREAKFAST,
     LAUNDRY,
-    AIRPORT_TRANSFER
 }
