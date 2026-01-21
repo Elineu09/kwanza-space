@@ -1,12 +1,15 @@
 package hotel.model;
 
 import hotel.model.enums.ReservationStatus;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Reservation {
+public class Reservation implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String reservationCode;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;

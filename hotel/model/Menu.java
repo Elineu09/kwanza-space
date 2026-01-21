@@ -2,6 +2,7 @@ package hotel.model;
 
 import hotel.model.*;
 import hotel.model.enums.*;
+import hotel.storage.StorageManager;
 import hotel.service.PricingService;
 import hotel.service.ReservationService;
 import hotel.util.MenuUtil;
@@ -21,25 +22,22 @@ public class Menu {
 
     public Menu() {
         this.scanner = new Scanner(System.in);
-        this.hotel = new Hotel("Hotel Java");
-        this.reservationService = new ReservationService();
-
+        
+        // Tentar carregar dados persistidos
+        Hotel hotelCarregado = StorageManager.loadHotel();
+        if (hotelCarregado != null) {
+            this.hotel = hotelCarregado;
+            // ReservationService já está sincronizado com o hotel carregado
+            this.reservationService = new ReservationService();
+        } else {
+            // Criar novo hotel se não houver dados persistidos
+            this.hotel = new Hotel("Hotel Java");
+            this.reservationService = new ReservationService();
+        }
     }
 
-    private void limparTela() {
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } else {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-            }
-        } catch (Exception e) {
-            // Se falhar, imprime linhas em branco
-            for (int i = 0; i < 50; i++) {
-                System.out.println();
-            }
-        }
+    private void salvarDados() {
+        StorageManager.saveHotel(hotel);
     }
 
     private String formatarCliente(Client client) {
@@ -73,7 +71,6 @@ public class Menu {
 
     public void mostrarMenuPrincipal() {
         while (true) {
-            limparTela();
             MenuUtil.exibirTitulo("SISTEMA DE GESTÃO HOTELEIRA");
             System.out.println("  1. Gerenciar Reservas");
             System.out.println("  2. Gerenciar Quartos");
@@ -103,6 +100,7 @@ public class Menu {
                     break;
                 case 0:
                     System.out.println("\nSistema encerrado com sucesso. Até logo!");
+                    salvarDados();
                     return;
             }
         }
@@ -110,7 +108,7 @@ public class Menu {
 
     private void menuReservas() {
         while (true) {
-            limparTela();
+
             MenuUtil.exibirTitulo("GESTÃO DE RESERVAS");
             System.out.println("  1. Criar Nova Reserva");
             System.out.println("  2. Listar Todas as Reservas");
@@ -181,6 +179,7 @@ public class Menu {
             reservationService.createReservation(reservation);
 
             exibirDetalhesReservaCreated(reservation, room);
+            salvarDados();
         } catch (IllegalArgumentException e) {
             System.out.println("\nErro ao criar reserva: " + e.getMessage());
         }
@@ -256,6 +255,7 @@ public class Menu {
         try {
             reservationService.checkIn(reservation);
             System.out.println("Sucesso: Check-in realizado com sucesso!");
+            salvarDados();
         } catch (IllegalStateException e) {
             System.out.println("Erro ao realizar check-in: " + e.getMessage());
         }
@@ -277,6 +277,7 @@ public class Menu {
         try {
             reservationService.checkOut(reservation);
             System.out.println("Sucesso: Check-out realizado com sucesso!");
+            salvarDados();
         } catch (IllegalStateException e) {
             System.out.println("Erro ao realizar check-out: " + e.getMessage());
         }
@@ -298,6 +299,7 @@ public class Menu {
         try {
             reservationService.cancelReservation(reservation);
             System.out.println("Sucesso: Reserva cancelada com sucesso!");
+            salvarDados();
         } catch (IllegalStateException e) {
             System.out.println("Erro ao cancelar reserva: " + e.getMessage());
         }
@@ -305,7 +307,7 @@ public class Menu {
 
     private void menuQuartos() {
         while (true) {
-            limparTela();
+
             MenuUtil.exibirTitulo("GESTÃO DE QUARTOS");
             System.out.println("  1. Adicionar Novo Quarto");
             System.out.println("  2. Listar Todos os Quartos");
@@ -350,6 +352,7 @@ public class Menu {
                 hotel.addRoom(new Room(nquartos, tipo, preco, capacidade, RoomStatus.ACTIVE));
                 System.out.println("Sucesso: Quarto Standard #" + nquartos + " adicionado com sucesso!");
                 nquartos++;
+                salvarDados();
                 break;
             case 2:
                 tipo = RoomType.DELUXE;
@@ -357,6 +360,7 @@ public class Menu {
                 hotel.addRoom(new Room(nquartos, tipo, preco, capacidade, RoomStatus.ACTIVE));
                 System.out.println("Sucesso: Quarto Deluxe #" + nquartos + " adicionado com sucesso!");
                 nquartos++;
+                salvarDados();
                 break;
             case 3:
                 tipo = RoomType.SUITE;
@@ -364,6 +368,7 @@ public class Menu {
                 hotel.addRoom(new Room(nquartos, tipo, preco, capacidade, RoomStatus.ACTIVE));
                 System.out.println("Sucesso: Quarto Suite #" + nquartos + " adicionado com sucesso!");
                 nquartos++;
+                salvarDados();
                 break;
         }
     }
@@ -409,21 +414,24 @@ public class Menu {
             case 1:
                 room1.setStatus(RoomStatus.ACTIVE);
                 System.out.println("Sucesso: Status alterado para ATIVO!");
+                salvarDados();
                 break;
             case 2:
                 room1.setStatus(RoomStatus.INACTIVE);
                 System.out.println("Sucesso: Status alterado para INATIVO!");
+                salvarDados();
                 break;
             case 3:
                 room1.setStatus(RoomStatus.MAINTENANCE);
                 System.out.println("Sucesso: Status alterado para MANUTENÇÃO!");
+                salvarDados();
                 break;
         }
     }
 
     private void menuClientes() {
         while (true) {
-            limparTela();
+
             MenuUtil.exibirTitulo("GESTÃO DE CLIENTES");
             System.out.println("  1. Cadastrar Novo Cliente");
             System.out.println("  2. Listar Todos os Clientes");
@@ -459,6 +467,7 @@ public class Menu {
         Client client1 = new Client(idcliente, nome, documento, String.valueOf(telefone), email);
         hotel.getClients().add(client1);
         System.out.println("Sucesso: Cliente cadastrado com sucesso! ID: " + idcliente);
+        salvarDados();
     }
 
     private void listarTodosClientes() {
@@ -473,7 +482,6 @@ public class Menu {
 
     private void menuServicos() {
         while (true) {
-            limparTela();
             MenuUtil.exibirTitulo("GESTÃO DE SERVIÇOS ADICIONAIS");
             System.out.println("  1. Adicionar Serviço à Reserva");
             System.out.println("  2. Listar Serviços Disponíveis");
@@ -531,19 +539,23 @@ public class Menu {
             case 1:
                 reservation.addService(new AdditionalService("Transporte", ServiceType.TRANSPORT, 20000.0, 1, BillingType.FIXED));
                 System.out.println("Sucesso: Serviço de Transporte adicionado com sucesso!");
+                salvarDados();
                 break;
             case 2:
                 reservation.addService(new AdditionalService("Café da Manhã", ServiceType.BREAKFAST, 5000.0, 1, BillingType.PER_NIGHT));
                 System.out.println("Sucesso: Serviço de Café da Manhã adicionado com sucesso!");
+                salvarDados();
                 break;
             case 3:
                 reservation.addService(new AdditionalService("Estacionamento", ServiceType.PARKING, 20000.0, 1, BillingType.FIXED));
                 System.out.println("Sucesso: Serviço de Estacionamento adicionado com sucesso!");
+                salvarDados();
                 break;
             case 4:
                 int unidades = MenuUtil.lerInteiroPositivo("> Quantas unidades deseja adicionar? ", scanner);
                 reservation.addService(new AdditionalService("Lavandaria", ServiceType.LAUNDRY, 2000.0, unidades, BillingType.PER_UNIT));
                 System.out.println("Sucesso: Serviço de Lavandaria (" + unidades + " unidades) adicionado com sucesso!");
+                salvarDados();
                 break;
         }
     }
@@ -559,7 +571,6 @@ public class Menu {
 
     private void pagamentos() {
         while (true) {
-            limparTela();
             MenuUtil.exibirTitulo("PAGAMENTOS");
             System.out.println("  1. Pagamento Total");
             System.out.println("  2. Pagamento Parcial");
@@ -659,6 +670,7 @@ public class Menu {
         reservation.setStatus(ReservationStatus.CONFIRMED);
         System.out.println("\nSucesso: Pagamento de " + String.format("%.2f", valor) + " kz efetuado com sucesso!");
         System.out.println("Sucesso: Reserva confirmada!");
+        salvarDados();
     }
 
     private void procesarPagamentoParcial(Reservation reservation, int metodo, int valor) {
@@ -672,6 +684,7 @@ public class Menu {
         } else {
             System.out.println("Saldo restante: " + String.format("%.2f", pricingService.calculateBalance(reservation)) + " kz");
         }
+        salvarDados();
     }
 
     private PaymentMethod obterMetodoPagamento(int metodo) {

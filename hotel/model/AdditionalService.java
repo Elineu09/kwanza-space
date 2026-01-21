@@ -3,8 +3,11 @@ package hotel.model;
 import hotel.model.enums.BillingType;
 import hotel.model.enums.ServiceType;
 import hotel.interfaces.Chargeable;
+import java.io.Serializable;
 
-public class AdditionalService implements Chargeable {
+public class AdditionalService implements Chargeable, Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String description;
     private ServiceType serviceType;
     private double unitPrice;
