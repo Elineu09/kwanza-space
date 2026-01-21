@@ -59,12 +59,12 @@ public class AdditionalService implements Chargeable, Serializable {
 
     @Override
     public String toString() {
-        return "AdditionalService{" +
-                "description='" + description + '\'' +
-                ", serviceType=" + serviceType +
-                ", unitPrice=" + unitPrice +
-                ", quantity=" + quantity +
-                ", billingType=" + billingType +
+        return "Serviço{" +
+                "descrição='" + description + '\'' +
+                ", tipo=" + serviceType +
+                ", preçoUnitário=" + unitPrice +
+                ", quantidade=" + quantity +
+                ", tipoCobran\u00e7a=" + billingType +
                 '}';
     }
 }

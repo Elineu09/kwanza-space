@@ -108,17 +108,17 @@ public class Reservation implements Serializable {
 
     @Override
     public String toString() {
-        return "Reservation{" +
-                "reservationCode='" + reservationCode + '\'' +
-                ", checkInDate=" + checkInDate +
-                ", checkOutDate=" + checkOutDate +
+        return "Reserva{" +
+                "código='" + reservationCode + '\'' +
+                ", checkIn=" + checkInDate +
+                ", checkOut=" + checkOutDate +
                 ", status=" + status +
-                ", numberOfGuests=" + numberOfGuests +
-                ", creationDate=" + creationDate +
-                ", client=" + client.getFullName() +
-                ", room=" + room.getNumber() +
-                ", services=" + services.size() +
-                ", payments=" + payments.size() +
+                ", hóspedes=" + numberOfGuests +
+                ", dataCriação=" + creationDate +
+                ", cliente=" + client.getFullName() +
+                ", quarto=" + room.getNumber() +
+                ", serviços=" + services.size() +
+                ", pagamentos=" + payments.size() +
                 '}';
     }
 }

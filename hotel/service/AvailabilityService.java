@@ -16,7 +16,8 @@ public class AvailabilityService {
 
         for (Reservation existingReservation : allReservations) {
             if (existingReservation.getStatus() == ReservationStatus.CONFIRMED ||
-                existingReservation.getStatus() == ReservationStatus.CHECKED_IN) {
+                existingReservation.getStatus() == ReservationStatus.CHECKED_IN ||
+                existingReservation.getStatus() == ReservationStatus.CREATED) {
                 
                 if (existingReservation.getRoom().getNumber() == room.getNumber()) {
                     if (newReservation.overlaps(existingReservation)) {

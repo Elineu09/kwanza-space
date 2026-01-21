@@ -53,11 +53,11 @@ public class Client implements Serializable {
 
     @Override
     public String toString() {
-        return "Client{" +
+        return "Cliente{" +
                 "id='" + id + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", document='" + document + '\'' +
-                ", phone='" + phone + '\'' +
+                ", nomeCompleto='" + fullName + '\'' +
+                ", documento='" + document + '\'' +
+                ", telefone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }

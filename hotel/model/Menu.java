@@ -41,11 +41,21 @@ public class Menu {
     }
 
     private String formatarCliente(Client client) {
-        return String.format("%-20s | Doc: %-12s | Tel: %-15s | Email: %s",
+        return String.format("%-20s | Documento: %-12s | Telefone: %-15s | Email: %s",
                 client.getFullName(),
                 client.getDocument(),
                 client.getPhone(),
                 client.getEmail());
+    }
+
+    private String formatarQuarto(Room room, int index) {
+        return String.format("%d. Quarto #%-3d | Tipo: %-8s | Preço: %,.2f kz | Capacidade: %d | Status: %s",
+                index,
+                room.getNumber(),
+                room.getType(),
+                room.getDailyBasePrice(),
+                room.getCapacity(),
+                room.getStatus());
     }
 
     private String formatarReserva(Reservation reservation, int index) {
@@ -159,7 +169,11 @@ public class Menu {
         Client client = hotel.getClients().get(idCliente - 1);
 
         MenuUtil.exibirSubtitulo("SELEÇÃO DE QUARTO");
-        hotel.getRooms().forEach(System.out::println);
+        int roomIndex = 1;
+        for (Room r : hotel.getRooms()) {
+            System.out.println(formatarQuarto(r, roomIndex));
+            roomIndex++;
+        }
         int idQuarto = MenuUtil.lerInteiroBounds("> Selecione o número do quarto: ", 1, hotel.getRooms().size(), scanner);
         Room room = hotel.getRooms().get(idQuarto - 1);
 
@@ -377,7 +391,11 @@ public class Menu {
         }
         System.out.println("\nLISTA DE QUARTOS");
         System.out.println("────────────────────────────────────────");
-        hotel.getRooms().forEach(System.out::println);
+        int roomIndex = 1;
+        for (Room r : hotel.getRooms()) {
+            System.out.println(formatarQuarto(r, roomIndex));
+            roomIndex++;
+        }
     }
 
     private void alterarStatusQuarto() {
@@ -386,7 +404,11 @@ public class Menu {
             return;
         }
         MenuUtil.exibirSubtitulo("ALTERAR STATUS DO QUARTO");
-        hotel.getRooms().forEach(System.out::println);
+        int roomIndex = 1;
+        for (Room r : hotel.getRooms()) {
+            System.out.println(formatarQuarto(r, roomIndex));
+            roomIndex++;
+        }
         int idQuarto = MenuUtil.lerInteiroBounds("> Selecione o número do quarto: ", 1, hotel.getRooms().size(), scanner);
         
         Room room1 = hotel.getRooms().get(idQuarto - 1);
@@ -395,7 +417,8 @@ public class Menu {
         for (Reservation reservation : reservationService.getAllReservations()) {
             if (reservation.getRoom().equals(room1) && 
                 (reservation.getStatus() == ReservationStatus.CONFIRMED || 
-                 reservation.getStatus() == ReservationStatus.CHECKED_IN)) {
+                 reservation.getStatus() == ReservationStatus.CHECKED_IN ||
+                 reservation.getStatus() == ReservationStatus.CREATED)) {
                 System.out.println("Atenção: Este quarto possui reserva ativa. Não é possível alterar o status.");
                 return;
             }
@@ -473,7 +496,11 @@ public class Menu {
         }
         System.out.println("\nLISTA DE CLIENTES");
         System.out.println("────────────────────────────────────────");
-        hotel.getClients().forEach(System.out::println);
+        int clientIndex = 1;
+        for (Client c : hotel.getClients()) {
+            System.out.println(clientIndex + ". " + formatarCliente(c));
+            clientIndex++;
+        }
     }
 
     private void menuServicos() {
@@ -510,7 +537,11 @@ public class Menu {
         }
         System.out.println("\nADICIONAR SERVIÇO À RESERVA");
         System.out.println("────────────────────────────────────────");
-        reservationService.getAllReservations().forEach(System.out::println);
+        int reservaIndex = 1;
+        for (Reservation r : reservationService.getAllReservations()) {
+            System.out.println(formatarReserva(r, reservaIndex));
+            reservaIndex++;
+        }
         int reserva = MenuUtil.lerInteiroBounds("> Selecione o número da reserva: ", 1, reservationService.getAllReservations().size(), scanner);
         Reservation reservation = reservationService.getAllReservations().get(reserva - 1);
 
@@ -595,7 +626,11 @@ public class Menu {
         }
         System.out.println("\nPAGAMENTO TOTAL");
         System.out.println("────────────────────────────────────────");
-        reservationService.getAllReservations().forEach(System.out::println);
+        int reservaIndex = 1;
+        for (Reservation r : reservationService.getAllReservations()) {
+            System.out.println(formatarReserva(r, reservaIndex));
+            reservaIndex++;
+        }
         int reserva = MenuUtil.lerInteiroBounds("> Selecione o número da reserva: ", 1, reservationService.getAllReservations().size(), scanner);
         Reservation reservation = reservationService.getAllReservations().get(reserva - 1);
 
@@ -620,7 +655,11 @@ public class Menu {
         }
         System.out.println("\nPAGAMENTO PARCIAL");
         System.out.println("────────────────────────────────────────");
-        reservationService.getAllReservations().forEach(System.out::println);
+        int reservaIndex = 1;
+        for (Reservation r : reservationService.getAllReservations()) {
+            System.out.println(formatarReserva(r, reservaIndex));
+            reservaIndex++;
+        }
         int reserva = MenuUtil.lerInteiroBounds("> Selecione o número da reserva: ", 1, reservationService.getAllReservations().size(), scanner);
         Reservation reservation = reservationService.getAllReservations().get(reserva - 1);
 

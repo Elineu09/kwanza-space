@@ -47,11 +47,11 @@ public class Room implements Serializable {
 
     @Override
     public String toString() {
-        return "Room{" +
-                "number=" + number +
-                ", type=" + type +
-                ", dailyBasePrice=" + dailyBasePrice +
-                ", capacity=" + capacity +
+        return "Quarto{" +
+                "número=" + number +
+                ", tipo=" + type +
+                ", preçoDiário=" + dailyBasePrice +
+                ", capacidade=" + capacity +
                 ", status=" + status +
                 '}';
     }
