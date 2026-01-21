@@ -1,12 +1,15 @@
 package hotel.model;
 
 import hotel.model.enums.ReservationStatus;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Reservation {
+public class Reservation implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String reservationCode;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
@@ -20,14 +23,13 @@ public class Reservation {
 
     public Reservation(LocalDate checkInDate, LocalDate checkOutDate, int numberOfGuests, 
                       LocalDate creationDate, Client client, Room room) {
-        // Validate dates
         if (checkOutDate.compareTo(checkInDate) <= 0) {
-            throw new IllegalArgumentException("checkOutDate must be strictly after checkInDate");
+            throw new IllegalArgumentException("A data de check-out deve ser posterior à data de check-in");
+
         }
 
-        // Validate capacity
         if (numberOfGuests > room.getCapacity()) {
-            throw new IllegalArgumentException("numberOfGuests cannot exceed room capacity");
+            throw new IllegalArgumentException("Número de hóspedes não pode exceder a capacidade do quarto");
         }
 
         this.reservationCode = UUID.randomUUID().toString();

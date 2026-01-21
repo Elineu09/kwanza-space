@@ -14,88 +14,61 @@ public class ReservationService {
         this.reservations = new java.util.ArrayList<>();
     }
 
-    /**
-     * Create and register a new reservation
-     */
     public Reservation createReservation(Reservation reservation) {
-        // Check availability
         if (!availabilityService.isRoomAvailable(reservation.getRoom(), reservation, reservations)) {
-            throw new IllegalStateException("Room is not available for the requested dates");
+            throw new IllegalStateException("Quarto não está disponível para as datas solicitadas");
         }
 
-        // Add to reservations list
         reservations.add(reservation);
         return reservation;
     }
 
-    /**
-     * Transition from CREATED to CONFIRMED
-     * Can confirm if balance <= 0 or manually confirmed
-     */
     public void confirmReservation(Reservation reservation) {
         if (reservation.getStatus() != ReservationStatus.CREATED) {
-            throw new IllegalStateException("Only CREATED reservations can be confirmed");
+            throw new IllegalStateException("Apenas reservas com status CRIADA podem ser confirmadas");
         }
 
         if (!pricingService.canConfirmReservation(reservation)) {
-            throw new IllegalStateException("Cannot confirm: balance is positive (payment required)");
+            throw new IllegalStateException("Não é possível confirmar: pagamento pendente");
         }
 
         reservation.setStatus(ReservationStatus.CONFIRMED);
     }
 
-    /**
-     * Transition to CHECKED_IN (from CONFIRMED)
-     */
     public void checkIn(Reservation reservation) {
         if (reservation.getStatus() != ReservationStatus.CONFIRMED) {
-            throw new IllegalStateException("Only CONFIRMED reservations can be checked in");
+            throw new IllegalStateException("Apenas reservas CONFIRMADAS podem fazer check-in");
         }
 
         reservation.setStatus(ReservationStatus.CHECKED_IN);
     }
 
-    /**
-     * Transition to CHECKED_OUT (from CHECKED_IN)
-     */
     public void checkOut(Reservation reservation) {
         if (reservation.getStatus() != ReservationStatus.CHECKED_IN) {
-            throw new IllegalStateException("Only CHECKED_IN reservations can be checked out");
+            throw new IllegalStateException("Apenas reservas em CHECK-IN podem fazer check-out");
         }
 
         reservation.setStatus(ReservationStatus.CHECKED_OUT);
     }
 
-    /**
-     * Cancel reservation (only before CHECKED_IN)
-     */
     public void cancelReservation(Reservation reservation) {
         if (reservation.getStatus() == ReservationStatus.CHECKED_IN || 
             reservation.getStatus() == ReservationStatus.CHECKED_OUT ||
             reservation.getStatus() == ReservationStatus.CANCELLED) {
-            throw new IllegalStateException("Cannot cancel after check-in or if already cancelled");
+            throw new IllegalStateException("Não é possível cancelar após check-in ou se já foi cancelada");
         }
 
         reservation.setStatus(ReservationStatus.CANCELLED);
     }
 
-    /**
-     * Get all reservations
-     */
     public java.util.List<Reservation> getAllReservations() {
         return new java.util.ArrayList<>(reservations);
     }
 
-    /**
-     * Get pricing service for calculations
-     */
     public PricingService getPricingService() {
         return pricingService;
     }
 
-    /**
-     * Get availability service for checking availability
-     */
     public AvailabilityService getAvailabilityService() {
         return availabilityService;
     }

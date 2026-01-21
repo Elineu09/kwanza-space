@@ -2,9 +2,12 @@ package hotel.model;
 
 import hotel.model.enums.PaymentMethod;
 import hotel.model.enums.PaymentStatus;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Payment {
+public class Payment implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private double amountPaid;
     private LocalDate paymentDate;
     private PaymentMethod method;

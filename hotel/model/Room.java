@@ -2,8 +2,11 @@ package hotel.model;
 
 import hotel.model.enums.RoomType;
 import hotel.model.enums.RoomStatus;
+import java.io.Serializable;
 
-public class Room {
+public class Room implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int number;
     private RoomType type;
     private double dailyBasePrice;
