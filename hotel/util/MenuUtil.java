@@ -4,9 +4,6 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 
-/**
- * Classe utilitária com métodos estáticos para suportar operações comuns do Menu
- */
 public class MenuUtil {
     
     /**
@@ -40,6 +37,7 @@ public class MenuUtil {
      * @param scanner Scanner para entrada
      * @return Inteiro válido dentro do intervalo
      */
+    
     public static int lerInteiroBounds(String prompt, int minimo, int maximo, Scanner scanner) {
         int valor;
         boolean valido = false;

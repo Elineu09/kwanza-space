@@ -10,7 +10,6 @@ public class StorageManager {
     private static final String HOTEL_FILE = DATA_DIRECTORY + File.separator + "hotel.dat";
 
     static {
-        // Criar diretório de dados se não existir
         try {
             Files.createDirectories(Paths.get(DATA_DIRECTORY));
         } catch (IOException e) {
@@ -18,10 +17,6 @@ public class StorageManager {
         }
     }
 
-    /**
-     * Carrega o estado do hotel do ficheiro de persistência
-     * Se o ficheiro não existir, retorna null
-     */
     public static Hotel loadHotel() {
         if (!Files.exists(Paths.get(HOTEL_FILE))) {
             System.out.println("Ficheiro de dados não encontrado. Iniciando sistema do zero...");
@@ -39,10 +34,6 @@ public class StorageManager {
         }
     }
 
-    /**
-     * Grava o estado do hotel no ficheiro de persistência
-     * Sobrescreve o ficheiro anterior
-     */
     public static void saveHotel(Hotel hotel) {
         try (ObjectOutputStream oos = new ObjectOutputStream(
                 new FileOutputStream(HOTEL_FILE))) {
@@ -53,9 +44,6 @@ public class StorageManager {
         }
     }
 
-    /**
-     * Limpa todos os dados persistidos (útil para testes/reset)
-     */
     public static void clearData() {
         try {
             if (Files.exists(Paths.get(HOTEL_FILE))) {
@@ -67,9 +55,6 @@ public class StorageManager {
         }
     }
 
-    /**
-     * Verifica se já existem dados persistidos
-     */
     public static boolean dataExists() {
         return Files.exists(Paths.get(HOTEL_FILE));
     }

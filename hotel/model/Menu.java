@@ -36,6 +36,22 @@ public class Menu {
         }
     }
 
+    private void limparTela() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            // Se falhar, imprime linhas em branco
+            for (int i = 0; i < 50; i++) {
+                System.out.println();
+            }
+        }
+    }
+
     private void salvarDados() {
         StorageManager.saveHotel(hotel);
     }
@@ -71,6 +87,7 @@ public class Menu {
 
     public void mostrarMenuPrincipal() {
         while (true) {
+            limparTela();
             MenuUtil.exibirTitulo("SISTEMA DE GESTÃO HOTELEIRA");
             System.out.println("  1. Gerenciar Reservas");
             System.out.println("  2. Gerenciar Quartos");
@@ -100,7 +117,6 @@ public class Menu {
                     break;
                 case 0:
                     System.out.println("\nSistema encerrado com sucesso. Até logo!");
-                    salvarDados();
                     return;
             }
         }
@@ -108,7 +124,7 @@ public class Menu {
 
     private void menuReservas() {
         while (true) {
-
+            limparTela();
             MenuUtil.exibirTitulo("GESTÃO DE RESERVAS");
             System.out.println("  1. Criar Nova Reserva");
             System.out.println("  2. Listar Todas as Reservas");
@@ -307,7 +323,7 @@ public class Menu {
 
     private void menuQuartos() {
         while (true) {
-
+            limparTela();
             MenuUtil.exibirTitulo("GESTÃO DE QUARTOS");
             System.out.println("  1. Adicionar Novo Quarto");
             System.out.println("  2. Listar Todos os Quartos");
@@ -431,7 +447,7 @@ public class Menu {
 
     private void menuClientes() {
         while (true) {
-
+            limparTela();
             MenuUtil.exibirTitulo("GESTÃO DE CLIENTES");
             System.out.println("  1. Cadastrar Novo Cliente");
             System.out.println("  2. Listar Todos os Clientes");
@@ -482,6 +498,7 @@ public class Menu {
 
     private void menuServicos() {
         while (true) {
+            limparTela();
             MenuUtil.exibirTitulo("GESTÃO DE SERVIÇOS ADICIONAIS");
             System.out.println("  1. Adicionar Serviço à Reserva");
             System.out.println("  2. Listar Serviços Disponíveis");
@@ -571,6 +588,7 @@ public class Menu {
 
     private void pagamentos() {
         while (true) {
+            limparTela();
             MenuUtil.exibirTitulo("PAGAMENTOS");
             System.out.println("  1. Pagamento Total");
             System.out.println("  2. Pagamento Parcial");
@@ -670,7 +688,6 @@ public class Menu {
         reservation.setStatus(ReservationStatus.CONFIRMED);
         System.out.println("\nSucesso: Pagamento de " + String.format("%.2f", valor) + " kz efetuado com sucesso!");
         System.out.println("Sucesso: Reserva confirmada!");
-        salvarDados();
     }
 
     private void procesarPagamentoParcial(Reservation reservation, int metodo, int valor) {
@@ -684,7 +701,6 @@ public class Menu {
         } else {
             System.out.println("Saldo restante: " + String.format("%.2f", pricingService.calculateBalance(reservation)) + " kz");
         }
-        salvarDados();
     }
 
     private PaymentMethod obterMetodoPagamento(int metodo) {
